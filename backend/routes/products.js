@@ -3,8 +3,6 @@ const router = express.Router();
 const db = require("../db");
 
 
-let products = []; // временное хранилище
-
 router.get("/", (req, res) => {
   res.json(products);
 });

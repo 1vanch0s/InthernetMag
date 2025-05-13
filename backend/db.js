@@ -11,6 +11,8 @@ const pool = new Pool({
   client_encoding: 'UTF8',
 });
 
-module.exports = pool;
+const query = (text, params) => pool.query(text, params);
+
+module.exports = { query };
 
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors'); // Подключаем cors
 const productRoutes = require('./routes/products'); // Подключаем роуты
+const { query } = require('./db'); // Импортируем pool из db.js для работы с БД
 
 const app = express();
 
@@ -17,8 +18,45 @@ app.use(cors());
 // Прочие middlewares
 app.use(express.json());
 
+app.get("/api/products", async (req, res) => {
+  try {
+    const result = await query('SELECT * FROM products'); // Получаем товары из БД
+    //console.log("Полученные товары:", products.rows);
+    res.json(result.rows); // Отправляем товары на клиент
+  } catch (err) {
+    console.error('Ошибка при получении товаров: ', err);
+    res.status(500).json({ message: 'Ошибка при получении товаров' });
+  }
+});
+
+app.post("/api/products", async (req, res) => {
+  const { name, price, image_url, description, category, in_stock } = req.body;
+
+  if (!name || !price || !image_url ) {
+    return res.status(400).json({ message: "Имя, цена и изображение обязательны" });
+  }
+
+  try {
+    // Добавляем новый товар в БД
+    const result = await query(
+      'INSERT INTO products (name, price, image_url, description, category, in_stock, created_at) VALUES ($1, $2, $3, $4, $5, $6, now()) RETURNING *',
+      [name, price, image_url, description || '', category || '', in_stock || 0]
+    );
+    const newProduct = result.rows[0]; // Получаем добавленный товар
+    res.status(201).json(result.rows[0]); // Отправляем добавленный товар в ответе
+  } catch (err) {
+    console.error('Ошибка при добавлении товара: ', err);
+    res.status(500).json({ message: 'Ошибка при добавлении товара' });
+  }
+});
+
 // Пример маршрута с продуктами
 app.use("/api/products", productRoutes);
+
+// app.get("/api/products", (req, res) => {
+//   res.json(products);
+// });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

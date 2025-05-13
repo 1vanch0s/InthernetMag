@@ -7,16 +7,19 @@ import "./ProductList.css";
 function ProductList({ addToCart }) {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/products")
-      .then(res => setProducts(res.data))
-      .catch(err => console.error(err));
-  }, []);
+  // useEffect(() => {
+  //  axios.get("http://localhost:5000/api/products")
+  //    .then(res => setProducts(res.data))
+  //    .catch(err => console.error(err));
+  // }, []);
 
   useEffect(() => {
-  fetch("/api/products")
+  fetch("http://localhost:5000/api/products")
     .then(res => res.json())
-    .then(data => setProducts(data))
+    .then(data => {
+      console.log('Полученные данные:', data); // Логируем данные
+      setProducts(data);
+    })
     .catch(err => console.error("Ошибка при загрузке товаров:", err));
 }, []);
 
