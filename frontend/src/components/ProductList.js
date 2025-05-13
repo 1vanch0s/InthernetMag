@@ -29,14 +29,14 @@ function ProductList() {
   };
   const fetchCategories = async () => {
   try {
-    const query = category ? `?category=${encodeURIComponent(category)}` : "";
-    const res = await fetch(`http://localhost:5000/api/products${query}`);
+    const res = await fetch("http://localhost:5000/api/categories");
     const data = await res.json();
-    setProducts(data);
+    setCategories(data);
   } catch (err) {
-    console.error("Ошибка при загрузке товаров:", err);
+    console.error("Ошибка при загрузке категорий:", err);
   }
 };
+
 
 
   const handleApplyFilters = () => {

@@ -23,21 +23,25 @@ app.use(express.json());
 app.get("/api/products", async (req, res) => {
   const { category, sort, minPrice, maxPrice } = req.query;
 
-  let queryText = 'SELECT * FROM products';
-  const values = [];  
+  console.log("Полученные параметры:", { category, sort, minPrice, maxPrice });
+
+  let queryText = 'SELECT * FROM products WHERE 1=1';
+  const values = [];    
+  let count = 1;
+
 
   if (category) {
-    queryText += ' WHERE category = $1';
+    queryText += ' AND category = $1';
     values.push(category);
   }
   if (minPrice) {
     queryText += ` AND price >= $${count++}`;
-    values.push(minPrice);
+    values.push(Number(minPrice));
   }
 
   if (maxPrice) {
     queryText += ` AND price <= $${count++}`;
-    values.push(maxPrice);
+    values.push(Number(maxPrice));
   }
 
   // Сортировка
@@ -53,6 +57,7 @@ app.get("/api/products", async (req, res) => {
     const result = await query(queryText, values);
     res.json(result.rows);
   } catch (err) {
+    console.error("Ошибка в /api/products:", err.message);
     console.error("Ошибка при получении товаров:", err);
     res.status(500).json({ message: "Ошибка при получении товаров" });
   }
