@@ -1,8 +1,10 @@
+// src/components/ProductList.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ProductList.css"; // создадим для стилизации
+import ProductCard from "./ProductCard";
+import "./ProductList.css";
 
-function ProductList({ addToCart }) {
+  function ProductList({ addToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -14,13 +16,11 @@ function ProductList({ addToCart }) {
   return (
     <div className="product-grid">
       {products.map(prod => (
-        <div className="product-card" key={prod.id}>
-          <img src={prod.image_url} alt={prod.name} />
-          <h3>{prod.name}</h3>
-          <p>{prod.description}</p>
-          <p><strong>{prod.price} руб.</strong></p>
-          <button onClick={() => addToCart(prod)}>Добавить в корзину</button>
-        </div>
+        <ProductCard
+          key={prod.id}
+          product={prod}
+          addToCart={addToCart}
+        />
       ))}
     </div>
   );

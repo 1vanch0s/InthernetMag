@@ -1,0 +1,26 @@
+/* frontend/src/components/ProductCard.css */
+.product-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  background-color: #fff;
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.product-card h3 {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.product-card .price {
+  color: green;
+  font-weight: bold;
+}
+

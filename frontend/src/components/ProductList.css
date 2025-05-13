@@ -18,3 +18,13 @@
   height: auto;
   border-radius: 4px;
 }
+
+
+/* frontend/src/components/ProductList.css */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 2rem;
+}
