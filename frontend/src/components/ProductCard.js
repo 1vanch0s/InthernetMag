@@ -8,6 +8,7 @@ function ProductCard({ product, addToCart }) {
       <img src={product.image_url} alt={product.name} />
       <h3>{product.name}</h3>
       <p>{product.description}</p>
+      <p>{product.category}</p>
       <p className="price">₽{product.price}</p>
       <button onClick={() => addToCart(product)}>Добавить в корзину</button>
     </div>

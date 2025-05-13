@@ -49,7 +49,7 @@ function App() {
         <CartSummary cartItems={cartItems} />
         
         <Routes>
-          <Route path="/" element={<ProductList addToCart={addToCart} />} />
+          <Route path="/" element={<ProductList products={products} addToCart={addToCart} />} />
           <Route 
             path="/cart" 
             element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} />} 

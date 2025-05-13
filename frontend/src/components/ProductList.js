@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./ProductList.css";
+import ProductCard from "./ProductCard";
+import CartSummary from "../components/CartSummary";
 
-function ProductList() {
+
+function ProductList({ addToCart }) {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [categories, setCategories] = useState([]);
-
 
   useEffect(() => {
     fetchProducts();
@@ -43,9 +45,12 @@ function ProductList() {
     fetchProducts({ category, sort, minPrice, maxPrice });
   };
 
+  
+
   return (
     <div>
       <h2>Каталог товаров</h2>
+    
 
       {/* Фильтры */}
       <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
@@ -71,16 +76,15 @@ function ProductList() {
       </div>
 
       {/* Список товаров */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+
         {products.map((product) => (
-          <div key={product.id} style={{ border: "1px solid #ccc", padding: "1rem", width: "200px" }}>
-            <img src={product.image_url} alt={product.name} style={{ width: "100%" }} />
-            <h4>{product.name}</h4>
-            <p>{product.price} ₽</p>
-            <p>{product.category}</p>
-          </div>
+          <ProductCard
+            key={product.id}
+            product={product}
+            addToCart={addToCart} // Передаем функцию добавления в корзину
+          />
         ))}
-      </div>
+
     </div>
   );
 }
