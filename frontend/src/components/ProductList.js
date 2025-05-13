@@ -13,6 +13,14 @@ function ProductList({ addToCart }) {
       .catch(err => console.error(err));
   }, []);
 
+  useEffect(() => {
+  fetch("/api/products")
+    .then(res => res.json())
+    .then(data => setProducts(data))
+    .catch(err => console.error("Ошибка при загрузке товаров:", err));
+}, []);
+
+
   return (
     <div className="product-list">
       <div className="product-grid">

@@ -4,6 +4,7 @@ const productRoutes = require('./routes/products'); // Подключаем ро
 
 const app = express();
 
+
 // Middleware для установки правильной кодировки UTF-8
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json; charset=UTF-8');
