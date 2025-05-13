@@ -26,9 +26,9 @@ function ProductList({ addToCart }) {
           </div>
         ))}
       </div>
-      <div className="cart-link">
-        <Link to="/cart">Перейти в корзину</Link>
-      </div>
+
+
+
     </div>
   );
 }

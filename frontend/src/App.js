@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
+import CartSummary from "./components/CartSummary";
+
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -21,6 +23,7 @@ function App() {
     <Router>
       <div style={{ padding: "2rem" }}>
         <h1>Интернет-магазин</h1>
+        <CartSummary cartItems={cartItems} />
         
         <Routes>
           <Route path="/" element={<ProductList addToCart={addToCart} />} />
