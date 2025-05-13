@@ -5,11 +5,14 @@ const db = require("../db");
 router.get("/", async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM products ORDER BY id DESC");
+    console.log(result.rows); // ← Вот здесь смотри, как отображается кириллица
     res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
+
+
 
 module.exports = router;

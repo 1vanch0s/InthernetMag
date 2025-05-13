@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import ProductList from "./components/ProductList";
+import Cart from "./components/Cart";
 
 function App() {
-  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/products")
-      .then(res => setProducts(res.data))
-      .catch(err => console.error(err));
-  }, []);
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+  };
+
+  const removeFromCart = (index) => {
+    const newCart = [...cartItems];
+    newCart.splice(index, 1);
+    setCartItems(newCart);
+  };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Каталог товаров</h1>
-      <ul>
-        {products.map(prod => (
-          <li key={prod.id}>
-            <strong>{prod.name}</strong> — {prod.price} руб.
-          </li>
-        ))}
-      </ul>
+    <div style={{ padding: "2rem" }}>
+      <h1>Интернет-магазин</h1>
+      <ProductList addToCart={addToCart} />
+      <Cart cartItems={cartItems} removeFromCart={removeFromCart} />
     </div>
   );
 }
