@@ -4,6 +4,8 @@ const productRoutes = require('./routes/products'); // Подключаем ро
 const { query } = require('./db'); // Импортируем pool из db.js для работы с БД
 
 const app = express();
+const categoryRoutes = require('./routes/categories');
+
 
 
 // Middleware для установки правильной кодировки UTF-8
@@ -19,15 +21,43 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api/products", async (req, res) => {
+  const { category, sort, minPrice, maxPrice } = req.query;
+
+  let queryText = 'SELECT * FROM products';
+  const values = [];  
+
+  if (category) {
+    queryText += ' WHERE category = $1';
+    values.push(category);
+  }
+  if (minPrice) {
+    queryText += ` AND price >= $${count++}`;
+    values.push(minPrice);
+  }
+
+  if (maxPrice) {
+    queryText += ` AND price <= $${count++}`;
+    values.push(maxPrice);
+  }
+
+  // Сортировка
+  if (sort === "price_asc") {
+    queryText += " ORDER BY price ASC";
+  } else if (sort === "price_desc") {
+    queryText += " ORDER BY price DESC";
+  } else if (sort === "newest") {
+    queryText += " ORDER BY created_at DESC";
+  }
+
   try {
-    const result = await query('SELECT * FROM products'); // Получаем товары из БД
-    //console.log("Полученные товары:", products.rows);
-    res.json(result.rows); // Отправляем товары на клиент
+    const result = await query(queryText, values);
+    res.json(result.rows);
   } catch (err) {
-    console.error('Ошибка при получении товаров: ', err);
-    res.status(500).json({ message: 'Ошибка при получении товаров' });
+    console.error("Ошибка при получении товаров:", err);
+    res.status(500).json({ message: "Ошибка при получении товаров" });
   }
 });
+
 
 app.post("/api/products", async (req, res) => {
   const { name, price, image_url, description, category, in_stock } = req.body;
@@ -56,6 +86,8 @@ app.use("/api/products", productRoutes);
 // app.get("/api/products", (req, res) => {
 //   res.json(products);
 // });
+app.use("/api/categories", categoryRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;
