@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
-import Checkout from "./components/Checkout";
+//import Checkout from "./components/Checkout";
 import CartSummary from "./components/CartSummary";
 import AdminPanel from "./components/AdminPanel";
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Checkout from './pages/Checkout';
+import CheckoutSuccess from './pages/CheckoutSuccess';
+import CheckoutCancel from './pages/CheckoutCancel';
 
 
 function App() {
@@ -64,6 +67,9 @@ function App() {
             path="/checkout" 
             element={<Checkout cartItems={cartItems} setCartItems={setCartItems} />} 
           />
+
+          <Route path="/checkout/success" element={<CheckoutSuccess />} />
+          <Route path="/checkout/cancel" element={<CheckoutCancel />} />  
           <Route path="/admin" element={<AdminPanel products={products} setProducts={setProducts} />} />
 
           <Route path="/register" element={<Register />} />

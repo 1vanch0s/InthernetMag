@@ -11,6 +11,14 @@ const pool = new Pool({
   client_encoding: 'UTF8',
 });
 
+pool.connect((err) => {
+  if (err) {
+    console.error('Failed to connect to PostgreSQL:', err.stack);
+  } else {
+    console.log('Connected to PostgreSQL');
+  }
+});
+
 const query = (text, params) => pool.query(text, params);
 
 module.exports = { query };
