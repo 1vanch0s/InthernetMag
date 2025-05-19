@@ -5,6 +5,10 @@ import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import CartSummary from "./components/CartSummary";
 import AdminPanel from "./components/AdminPanel";
+import Navbar from './components/Navbar';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -46,10 +50,12 @@ function App() {
     <Router>
       <div style={{ padding: "2rem" }}>
         <h1>Интернет-магазин</h1>
+        <Navbar />
         <CartSummary cartItems={cartItems} />
         
         <Routes>
           <Route path="/" element={<ProductList products={products} addToCart={addToCart} />} />
+          
           <Route 
             path="/cart" 
             element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} />} 
@@ -59,6 +65,10 @@ function App() {
             element={<Checkout cartItems={cartItems} setCartItems={setCartItems} />} 
           />
           <Route path="/admin" element={<AdminPanel products={products} setProducts={setProducts} />} />
+
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
     </Router>
