@@ -23,12 +23,22 @@ router.post('/create-checkout-session', authenticate, async (req, res) => {
   const userId = req.userId;
 
   try {
-    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    // Создаём заказ в таблице orders
     const orderResult = await query(
-      'INSERT INTO orders (user_id, total_amount, items, status) VALUES ($1, $2, $3, $4) RETURNING id',
-      [userId, totalAmount, JSON.stringify(items), 'pending']
+      'INSERT INTO orders (user_id, total_price, status) VALUES ($1, $2, $3) RETURNING id',
+      [userId, totalPrice, 'pending']
     );
     const orderId = orderResult.rows[0].id;
+
+    // Добавляем товары в таблицу order_items
+    for (const item of items) {
+      await query(
+        'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)',
+        [orderId, item.product_id, item.quantity, item.price]
+      );
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
