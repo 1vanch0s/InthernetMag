@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
 import CheckoutSuccess from './pages/CheckoutSuccess';
 import CheckoutCancel from './pages/CheckoutCancel';
+import Product from './pages/Product';
 
 
 function App() {
@@ -58,6 +59,8 @@ function App() {
         
         <Routes>
           <Route path="/" element={<ProductList products={products} addToCart={addToCart} />} />
+
+          <Route path="/products/:id" element={<Product />} />
           
           <Route 
             path="/cart" 

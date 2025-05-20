@@ -4,6 +4,8 @@ const productRoutes = require('./routes/products');
 const categoryRoutes = require('./routes/categories');
 const authRoutes = require('./routes/auth');
 const checkoutRoutes = require('./routes/checkout');
+const reviewsRoutes = require('./routes/reviews');
+
 
 const app = express();
 
@@ -20,6 +22,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/checkout', checkoutRoutes);
+app.use('/api/reviews', reviewsRoutes);
 
 app.get('/', (req, res) => {
   res.send('Backend is running');
