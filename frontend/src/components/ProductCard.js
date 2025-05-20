@@ -10,7 +10,10 @@ function ProductCard({ product, addToCart }) {
       <p>{product.description}</p>
       <p>{product.category}</p>
       <p className="price">₽{product.price}</p>
-      <button onClick={() => addToCart(product)}>Добавить в корзину</button>
+      <button onClick={(e) => {
+        e.preventDefault(); // Предотвращаем действие Link
+        e.stopPropagation(); // Останавливаем всплытие события
+        addToCart(product)}}>Добавить в корзину</button>
     </div>
   );
 }
