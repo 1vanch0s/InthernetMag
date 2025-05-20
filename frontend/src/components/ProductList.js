@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ProductList.css";
 import ProductCard from "./ProductCard";
 import { Link } from "react-router-dom";
+import Recommendations from "./Recommendations";
 
 function ProductList({ addToCart }) {
   const [products, setProducts] = useState([]);
@@ -115,6 +116,8 @@ function ProductList({ addToCart }) {
           </Link>
         ))}
       </div>
+      {/* Рекомендации */}
+      <Recommendations addToCart={addToCart} />
     </div>
   );
 }
