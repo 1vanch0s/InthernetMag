@@ -1,0 +1,82 @@
+-- Создание базы данных (если нужно)
+-- CREATE DATABASE inthernetmag;
+
+-- Подключение к базе данных
+-- \c online_store
+
+-- Удаление существующих таблиц (если они есть)
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+-- Таблица пользователей
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Таблица категорий
+CREATE TABLE categories (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL
+);
+
+-- Таблица товаров
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price NUMERIC(10, 2) NOT NULL,
+  category VARCHAR(255) REFERENCES categories(name),
+  image_url VARCHAR(255),
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Таблица заказов
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  total_price NUMERIC(10, 2) NOT NULL,
+  status VARCHAR(50) DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Таблица элементов заказа
+CREATE TABLE order_items (
+  id SERIAL PRIMARY KEY,
+  order_id INTEGER REFERENCES orders(id),
+  product_id INTEGER REFERENCES products(id),
+  quantity INTEGER NOT NULL,
+  price NUMERIC(10, 2) NOT NULL
+);
+
+-- Вставка тестовых данных
+-- Пользователи
+INSERT INTO users (name, email, password, created_at) VALUES
+  ('Test User', 'test@example.com', '$2b$10$examplehashedpassword', NOW());
+
+-- Категории
+INSERT INTO categories (name) VALUES
+  ('Electronics'),
+  ('Clothing');
+
+-- Товары
+INSERT INTO products (name, price, category, image_url, description, created_at) VALUES
+  ('Smartphone', 999.99, 'Electronics', 'https://via.placeholder.com/150', 'Latest model smartphone', NOW()),
+  ('T-Shirt', 29.99, 'Clothing', 'https://via.placeholder.com/150', 'Comfortable cotton t-shirt', NOW()),
+  ('Laptop', 1499.99, 'Electronics', 'https://via.placeholder.com/150', 'High-performance laptop', NOW()),
+  ('Jeans', 59.99, 'Clothing', 'https://via.placeholder.com/150', 'Stylish blue jeans', NOW());
+
+-- Тестовый заказ
+INSERT INTO orders (user_id, total_price, status, created_at) VALUES
+  (1, 1029.98, 'completed', NOW());
+
+-- Элементы тестового заказа
+INSERT INTO order_items (order_id, product_id, quantity, price) VALUES
+  (1, 1, 1, 999.99),
+  (1, 2, 1, 29.99);
