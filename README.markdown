@@ -94,7 +94,6 @@ cd InthernetMag
    ```
    - Замените `your_username`, `your_password` на данные для PostgreSQL.
    - Получите `STRIPE_SECRET_KEY` в [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys).
-   - Для `EMAIL_USER` и `EMAIL_PASS` используйте Gmail с [App Password](https://myaccount.google.com/security) или другой SMTP-сервис.
 4. Запустите бэкенд:
    ```bash
    node server.js
