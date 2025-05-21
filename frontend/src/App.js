@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
-//import Checkout from "./components/Checkout";
 import CartSummary from "./components/CartSummary";
 import AdminPanel from "./components/AdminPanel";
 import Navbar from './components/Navbar';
@@ -14,41 +13,48 @@ import CheckoutSuccess from './pages/CheckoutSuccess';
 import CheckoutCancel from './pages/CheckoutCancel';
 import Product from './pages/Product';
 
-
 function App() {
   const [cartItems, setCartItems] = useState([]);
 
+  // Загрузка корзины из localStorage при монтировании
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      setCartItems(JSON.parse(storedCart));
+    }
+  }, []);
 
-  
+  // Синхронизация cartItems с localStorage
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
+    setCartItems((prev) => {
+      const existingItem = prev.find(item => item.product_id === product.id);
+      if (existingItem) {
+        return prev.map(item =>
+          item.product_id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [
+        ...prev,
+        {
+          product_id: product.id,
+          name: product.name,
+          price: typeof product.price === 'string' ? parseFloat(product.price) : product.price,
+          quantity: 1,
+          image_url: product.image_url || product.image || 'https://via.placeholder.com/150',
+        },
+      ];
+    });
   };
 
-  const removeFromCart = (index) => {
-    const newCart = [...cartItems];
-    newCart.splice(index, 1);
-    setCartItems(newCart);
+  const removeFromCart = (productId) => {
+    setCartItems((prev) => prev.filter(item => item.product_id !== productId));
   };
-
-  const [products, setProducts] = useState([
-  { name: "Товар 1", price: "1000", image: "https://via.placeholder.com/150" },
-  { name: "Товар 2", price: "1500", image: "https://via.placeholder.com/150" }
-  ]);
-
-    useEffect(() => {
-  localStorage.setItem("products", JSON.stringify(products));
-  }, [products]);
-
-  useEffect(() => {
-  const storedProducts = localStorage.getItem("products");
-  if (storedProducts) {
-    setProducts(JSON.parse(storedProducts));
-  }
-  }, []);
-  
-  
-
 
   return (
     <Router>
@@ -58,23 +64,19 @@ function App() {
         <CartSummary cartItems={cartItems} />
         
         <Routes>
-          <Route path="/" element={<ProductList products={products} addToCart={addToCart} />} />
-
-          <Route path="/products/:id" element={<Product />} />
-          
+          <Route path="/" element={<ProductList addToCart={addToCart} />} />
+          <Route path="/products/:id" element={<Product addToCart={addToCart} />} />
           <Route 
             path="/cart" 
-            element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} />} 
+            element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} setCartItems={setCartItems} />} 
           />
           <Route 
             path="/checkout" 
             element={<Checkout cartItems={cartItems} setCartItems={setCartItems} />} 
           />
-
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/checkout/cancel" element={<CheckoutCancel />} />  
-          <Route path="/admin" element={<AdminPanel products={products} setProducts={setProducts} />} />
-
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
