@@ -47,7 +47,7 @@
 
 ### 1. Клонирование репозитория
 ```bash
-git clone https://github.com/1vanch0s/InthernetMag.git
+git clone https://github.com/1vanch0s/InthernetMag
 cd InthernetMag
 ```
 
@@ -55,7 +55,7 @@ cd InthernetMag
 1. Установите PostgreSQL, если ещё не установлен.
 2. Создайте базу данных:
    ```sql
-   createdb inthernetmag
+   createdb onlinemag
    ```
 3. Создайте таблицы, выполнив SQL-скрипт `backend/database.sql`:
    ```bash
