@@ -86,7 +86,7 @@ const Checkout = () => {
   return (
     <div>
       <h2>Checkout</h2>
-      <p>Total: ${total.toFixed(2)}</p>
+      <p>Total: ₽{total.toFixed(2)}</p>
       <Elements stripe={stripePromise}>
         <CheckoutForm items={cartItems} />
       </Elements>
